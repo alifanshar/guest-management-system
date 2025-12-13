@@ -1,6 +1,96 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+/* =======================
+   ENUMS
+======================= */
+enum Role {
+  USER
+  ADMIN
+}
+
+enum GuestStatus {
+  INVITED
+  CONFIRMED
+  CHECKED_IN
+}
+
+/* =======================
+   MODELS
+======================= */
+
 model User {
-  id Int @id @default(autoincrement())
-  email String @unique
-  password String
-  role Role @default(USER)
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(USER)
+
+  events    Event[]
+  guests    Guest[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([email])
+}
+
+model Event {
+  id          Int          @id @default(autoincrement())
+  title       String
+  description String?
+  location    String
+  eventDate   DateTime
+
+  createdById Int
+  createdBy   User         @relation(fields: [createdById], references: [id], onDelete: Cascade)
+
+  guests      EventGuest[]
+
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([eventDate])
+  @@index([createdById])
+}
+
+model Guest {
+  id          Int          @id @default(autoincrement())
+  name        String
+  email       String
+  phone       String?
+  status      GuestStatus @default(INVITED)
+
+  createdById Int
+  createdBy   User         @relation(fields: [createdById], references: [id], onDelete: Cascade)
+
+  events      EventGuest[]
+
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([email])
+  @@index([createdById])
+}
+
+model EventGuest {
+  id        Int      @id @default(autoincrement())
+
+  eventId   Int
+  guestId   Int
+
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  guest     Guest    @relation(fields: [guestId], references: [id], onDelete: Cascade)
+
+  checkInAt DateTime?
+
+  @@unique([eventId, guestId])
+  @@index([eventId])
+  @@index([guestId])
 }
