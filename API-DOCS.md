@@ -9,7 +9,7 @@ Dokumentasi ini menjelaskan seluruh endpoint REST API untuk **Guest Management S
 ## Base URL
 
 ```text
-http://PUBLIC_IP_EC2
+http://72.44.63.167
 ```
 
 ---
@@ -61,9 +61,9 @@ Request Body:
 
 ```json
 {
-  "name": "John Doe",
-  "email": "john@example.com",
-  "password": "Password123!"
+  "name": "Alif",
+  "email": "alif@gms.com",
+  "password": "Alif12345"
 }
 ```
 
@@ -79,8 +79,8 @@ Request Body:
 
 ```json
 {
-  "email": "john@example.com",
-  "password": "Password123!"
+  "email": "admin@gms.com",
+  "password": "admin12345"
 }
 ```
 
@@ -155,7 +155,7 @@ Response `200 OK`
 
 **POST** `/api/events`
 
-Auth: ✅ Required (USER / ADMIN)
+Auth: ✅ Required (ADMIN)
 
 Request Body:
 
@@ -175,7 +175,7 @@ Response `201 Created`
 
 **PUT** `/api/events/:id`
 
-Auth: ✅ Required (Owner / ADMIN)
+Auth: ✅ Required (ADMIN)
 
 Response `200 OK`
 
@@ -185,7 +185,7 @@ Response `200 OK`
 
 **DELETE** `/api/events/:id`
 
-Auth: ✅ Required (Owner / ADMIN)
+Auth: ✅ Required (ADMIN)
 
 Response `204 No Content`
 
@@ -226,8 +226,8 @@ Request Body:
 
 ```json
 {
-  "name": "Alice",
-  "email": "alice@mail.com",
+  "name": "Alif",
+  "email": "alif@gms.com",
   "phone": "08123456789"
 }
 ```
@@ -260,7 +260,7 @@ Response `204 No Content`
 
 ### Check API Status
 
-**GET** `/health`
+**GET** `/`
 
 Auth: ❌ Not required
 
@@ -299,5 +299,3 @@ Response `200 OK`
 * Refresh token digunakan untuk memperbarui access token
 
 ---
-
-Dokumentasi ini dibuat untuk memenuhi kebutuhan **Tugas Project Akhir Backend – Pemrograman Web**.
