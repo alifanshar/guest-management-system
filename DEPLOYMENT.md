@@ -9,8 +9,8 @@ Dokumen ini menjelaskan langkah lengkap melakukan deployment **Guest Management 
 ## 1. Informasi Umum
 
 * **Repository GitHub**: [https://github.com/USERNAME/guest-management-backend](https://github.com/USERNAME/guest-management-backend)
-* **Base URL Production**: http://PUBLIC_IP_EC2
-* **Health Check Endpoint**: `GET /health`
+* **Base URL Production**: http://72.44.63.167
+* **Health Check Endpoint**: `GET /`
 
 ---
 
@@ -23,7 +23,7 @@ Dokumen ini menjelaskan langkah lengkap melakukan deployment **Guest Management 
 | OS             | Ubuntu Server 22.04 LTS |
 | Storage        | 8 GB                    |
 | Region         | (sesuai AWS Academy)    |
-| Public IP      | PUBLIC_IP_EC2           |
+| Public IP      | 72.44.63.167            |
 
 ---
 
@@ -31,11 +31,11 @@ Dokumen ini menjelaskan langkah lengkap melakukan deployment **Guest Management 
 
 ### Inbound Rules
 
-| Type       | Port | Source    |
-| ---------- | ---- | --------- |
-| SSH        | 22   | 0.0.0.0/0 |
-| HTTP       | 80   | 0.0.0.0/0 |
-| Custom TCP | 3000 | 0.0.0.0/0 |
+| Type       | Port | Source           |
+| ---------- | ---- | ---------------- |
+| SSH        | 22   | 125.166.18.59/32 |
+| HTTP       | 80   | 0.0.0.0/0        |
+| Custom TCP | 4000 | 0.0.0.0/0        |
 
 ### Outbound Rules
 
@@ -47,7 +47,7 @@ Dokumen ini menjelaskan langkah lengkap melakukan deployment **Guest Management 
 
 ```bash
 chmod 400 keypair.pem
-ssh -i keypair.pem ubuntu@PUBLIC_IP_EC2
+ssh -i keypair.pem ubuntu@72.44.63.167
 ```
 
 Jika berhasil, terminal akan masuk ke server EC2.
@@ -155,7 +155,7 @@ npm run start
 Test:
 
 ```bash
-curl http://PUBLIC_IP_EC2:3000/health
+curl http://72.44.63.167:3000/
 ```
 
 Jika berhasil, hentikan dengan `Ctrl + C`.
@@ -199,8 +199,10 @@ Isi:
 server {
     listen 80;
 
+    server_name 72.44.63.167;
+
     location / {
-        proxy_pass http://localhost:3000;
+        proxy_pass http://localhost:4000;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
@@ -221,7 +223,7 @@ sudo systemctl restart nginx
 Akses API via:
 
 ```text
-http://PUBLIC_IP_EC2
+http://72.44.63.167
 ```
 
 ---
@@ -230,11 +232,11 @@ http://PUBLIC_IP_EC2
 
 Checklist:
 
-* [ ] `/health` return status 200
-* [ ] Login berhasil
-* [ ] CRUD Event berhasil
-* [ ] CRUD Guest berhasil
-* [ ] Authorization berjalan
+* [x] `/` return status 200
+* [x] Login berhasil
+* [x] CRUD Event berhasil
+* [x] CRUD Guest berhasil
+* [x] Authorization berjalan
 
 ---
 
@@ -263,7 +265,7 @@ pm2 restart guest-management-api
 
 ### Port tidak bisa diakses
 
-* Pastikan Security Group membuka port 3000 / 80
+* Pastikan Security Group membuka port 4000 / 80
 
 ### Aplikasi crash
 
@@ -287,9 +289,3 @@ pm2 restart guest-management-api
 
 * Email: [user1@test.com](mailto:user1@test.com)
 * Password: User123!
-
----
-
-## 18. Penutup
-
-Deployment ini memenuhi seluruh spesifikasi **Tugas Project Akhir Backend – Pemrograman Web** dan siap digunakan untuk demo serta penilaian.
