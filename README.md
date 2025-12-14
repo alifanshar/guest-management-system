@@ -86,11 +86,3 @@ npx prisma migrate dev
 npm run seed
 npm run dev
 ```
-
----
-
-## 📄 Lisensi
-
-Project ini dibuat untuk keperluan akademik.
-
----
