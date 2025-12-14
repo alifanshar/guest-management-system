@@ -12,7 +12,7 @@ app.use(cors());
 app.use(express.json());
 app.use(logger);
 
-// HEALTH CHECK
+// CHECK SERVER
 app.get("/", (req, res) => {
   res.status(200).json({
     status: "OK",
